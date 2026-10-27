@@ -1,0 +1,30 @@
+/* Convenience aliases over SEED's own semantic tokens (the --seed-* names remain canonical). */
+:root {
+  --brand: var(--seed-color-bg-brand-solid);
+  --brand-pressed: var(--seed-color-bg-brand-solid-pressed);
+  --fg-1: var(--seed-color-fg-neutral);
+  --fg-2: var(--seed-color-fg-neutral-muted);
+  --fg-3: var(--seed-color-fg-neutral-subtle);
+  --fg-placeholder: var(--seed-color-fg-placeholder);
+  --fg-brand: var(--seed-color-fg-brand);
+  --surface-page: var(--seed-color-bg-layer-default);
+  --surface-basement: var(--seed-color-bg-layer-basement);
+  --surface-floating: var(--seed-color-bg-layer-floating);
+  --surface-weak: var(--seed-color-bg-neutral-weak);
+  --stroke-subtle: var(--seed-color-stroke-neutral-subtle);
+  --stroke-muted: var(--seed-color-stroke-neutral-muted);
+  --font-sans: var(--seed-font-family);
+  --gutter: var(--seed-dimension-spacing-x-global-gutter);
+
+  /* Text styles (from recipes/text.css textStyle variants) */
+  --text-screen-title-size: var(--seed-font-size-t10); /* @kind font */
+  --text-screen-title-line: var(--seed-line-height-t10); /* @kind font */
+  --text-article-body-size: var(--seed-font-size-t5); /* @kind font */
+  --text-article-body-line: var(--seed-line-height-t6); /* @kind font */
+  --text-article-note-size: var(--seed-font-size-t4); /* @kind font */
+  --text-article-note-line: var(--seed-line-height-t5); /* @kind font */
+}
+
+html, body { font-family: var(--seed-font-family); color: var(--seed-color-fg-neutral); -webkit-font-smoothing: antialiased; }
+a { color: var(--seed-color-fg-brand); text-decoration: none; }
+a:hover { color: var(--seed-color-fg-brand-contrast); }
