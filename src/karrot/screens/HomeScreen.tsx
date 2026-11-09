@@ -41,10 +41,10 @@ export function HomeScreen({ app: { state: s, actions: a } }: { app: KarrotAppMo
             />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
               <div style={{ fontSize: 16, lineHeight: '22px' }}>{it.title}</div>
-              <div style={{ fontSize: 13, lineHeight: '18px', color: COLOR.sub }}>{it.meta}</div>
+              <div style={{ fontSize: 12, lineHeight: '18px', color: COLOR.sub }}>{it.meta}</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 {it.sold && <Badge tone="neutral" variant="solid">거래완료</Badge>}
-                <span style={{ fontSize: 16, lineHeight: '22px', fontWeight: 700 }}>{it.price}</span>
+                <span style={{ fontSize: 16, lineHeight: '22px', fontWeight: 600 }}>{it.price}</span>
               </div>
             </div>
           </div>

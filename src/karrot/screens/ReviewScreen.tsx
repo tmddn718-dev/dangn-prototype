@@ -19,7 +19,7 @@ export function ReviewScreen({ app: { state: s, actions: a } }: { app: KarrotApp
             />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
               <span style={{ fontSize: 16, lineHeight: '22px' }}>{s.form.title}</span>
-              <span style={{ fontSize: 16, fontWeight: 700 }}>{won(s.form.price)}</span>
+              <span style={{ fontSize: 16, fontWeight: 600 }}>{won(s.form.price)}</span>
             </div>
           </div>
           {info.groups.map((g) => (

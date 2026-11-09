@@ -18,7 +18,7 @@ export function AskSheet({ app: { state: s, actions: a } }: { app: KarrotAppMode
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: 4, paddingBottom: 16 }}>
         {missing.map((k) => (
-          <div key={k} style={{ display: 'flex', flexDirection: 'column', gap: 2, padding: '10px 0', borderBottom: divider }}>
+          <div key={k} style={{ display: 'flex', flexDirection: 'column', gap: 2, padding: '12px 0', borderBottom: divider }}>
             <Checkbox label={QUESTIONS[k]} checked={s.askSel.includes(k)} onCheckedChange={() => a.toggleAsk(k)} />
             <span style={{ fontSize: 12, color: COLOR.sub, paddingLeft: 32 }}>
               {info.unknowns.includes(k) ? '판매자도 모름 · ' : '미입력 · '}
@@ -41,11 +41,11 @@ export function ChangesSheet({ app: { state: s, actions: a } }: { app: KarrotApp
     <BottomSheet contained title="변경된 정보" description="판매자가 10분 전에 수정했어요" onClose={a.closeSheet}>
       <div style={{ display: 'flex', flexDirection: 'column', paddingBottom: 16 }}>
         {s.changes.map((c) => (
-          <div key={c.key} style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '14px 0', borderBottom: divider }}>
-            <span style={{ fontSize: 13, color: COLOR.sub }}>{c.label}</span>
+          <div key={c.key} style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '12px 0', borderBottom: divider }}>
+            <span style={{ fontSize: 12, color: COLOR.sub }}>{c.label}</span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <span style={{ fontSize: 14, color: COLOR.sub, textDecoration: 'line-through' }}>{c.prev}</span>
-              <span style={{ fontSize: 16, fontWeight: 700 }}>{c.cur}</span>
+              <span style={{ fontSize: 16, fontWeight: 600 }}>{c.cur}</span>
             </div>
           </div>
         ))}
@@ -75,10 +75,10 @@ export function SizeDialog({ app: { state: s, actions: a } }: { app: KarrotAppMo
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: '0 4px' }}>
-          <span id="size-dialog-title" className="pretty" style={{ fontSize: 20, lineHeight: '27px', fontWeight: 700, letterSpacing: -0.2 }}>
+          <span id="size-dialog-title" className="pretty" style={{ fontSize: 20, lineHeight: '27px', fontWeight: 600 }}>
             입력한 크기를 다시 확인해 주세요
           </span>
-          <span className="pretty" style={{ fontSize: 15, lineHeight: '22px', color: COLOR.muted }}>
+          <span className="pretty" style={{ fontSize: 14, lineHeight: '20px', color: COLOR.muted }}>
             {warnSizes(s.form)}로 입력했어요. 일반적인 가구보다 커요. 이 크기가 맞나요?
           </span>
         </div>

@@ -20,7 +20,7 @@ export function InfoGroupCard({ group: g, variant }: { group: InfoGroup; variant
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-        <span style={{ fontSize: 16, fontWeight: 700 }}>{g.title}</span>
+        <span style={{ fontSize: 16, fontWeight: 600 }}>{g.title}</span>
       </div>
       {g.allEmpty && <span style={{ fontSize: 14, color: 'var(--seed-color-fg-placeholder)' }}>아직 입력되지 않았어요</span>}
       {g.dims && (
@@ -29,12 +29,12 @@ export function InfoGroupCard({ group: g, variant }: { group: InfoGroup; variant
             <div
               key={c.label}
               style={{
-                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, padding: '10px 4px',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, padding: '12px 4px',
                 borderRadius: 8, background: 'var(--seed-color-bg-neutral-weak)',
               }}
             >
               <span style={{ fontSize: 12, color: subtle }}>{c.label}</span>
-              <span style={{ fontSize: 16, fontWeight: 700, color: c.color }}>{c.value}</span>
+              <span style={{ fontSize: 16, fontWeight: 600, color: c.color }}>{c.value}</span>
             </div>
           ))}
         </div>
@@ -78,7 +78,7 @@ export function InfoGroupCard({ group: g, variant }: { group: InfoGroup; variant
           }}
         >
           <Icon name="info" size={16} />
-          <span className="pretty" style={{ fontSize: 13, lineHeight: '18px' }}>
+          <span className="pretty" style={{ fontSize: 12, lineHeight: '18px' }}>
             엘리베이터가 있어도 가구 크기에 따라 옮기기 어려울 수 있어요. 크기를 함께 확인해 주세요.
           </span>
         </div>
