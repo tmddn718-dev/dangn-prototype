@@ -10,7 +10,7 @@ const labels = (ks: InfoKey[]) => ks.map((k) => LABELS[k]).join(', ');
 
 function ErrorCard({ onRetry }: { onRetry: () => void }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, padding: '32px 20px 24px', borderRadius: 12, border: stroke, textAlign: 'center' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, padding: '24px 16px', borderRadius: 12, border: stroke, textAlign: 'center' }}>
       <div
         style={{
           display: 'flex', width: 48, height: 48, borderRadius: 999, alignItems: 'center', justifyContent: 'center',
@@ -20,7 +20,7 @@ function ErrorCard({ onRetry }: { onRetry: () => void }) {
         <Icon name="info" size={24} />
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        <span style={{ fontSize: 17, lineHeight: '24px', fontWeight: 700 }}>거래 정보를 불러오지 못했어요</span>
+        <span style={{ fontSize: 16, lineHeight: '24px', fontWeight: 600 }}>거래 정보를 불러오지 못했어요</span>
         <span className="pretty" style={{ fontSize: 14, lineHeight: '20px', color: COLOR.sub }}>
           일시적인 문제로 정보를 보여드리지 못했어요.
           <br />
@@ -44,15 +44,15 @@ function LoadingCards() {
   );
   return (
     <>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', borderRadius: 8, background: 'var(--seed-color-bg-neutral-weak)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px', borderRadius: 8, background: 'var(--seed-color-bg-neutral-weak)' }}>
         <ProgressCircle size="24" />
         <span style={{ fontSize: 14, color: COLOR.muted }}>거래 정보를 다시 불러오고 있어요</span>
       </div>
       <div style={card}>
-        <span style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>크기 및 분해</span>
+        <span style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>크기 및 분해</span>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 8, marginBottom: 4 }}>
           {['가로', '세로', '높이'].map((l) => (
-            <div key={l} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, padding: '9px 4px', borderRadius: 8, border: stroke }}>
+            <div key={l} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, padding: '12px 4px', borderRadius: 8, border: stroke }}>
               <span style={{ fontSize: 12, color: COLOR.sub }}>{l}</span>
               {bar(48)}
             </div>
@@ -61,7 +61,7 @@ function LoadingCards() {
         {skRow('분해', 140)}
       </div>
       <div style={card}>
-        <span style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>가져가는 조건</span>
+        <span style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>가져가는 조건</span>
         {skRow('층수', 40)}
         {skRow('엘리베이터', 56)}
         {skRow('운반 도움', 160)}
@@ -111,7 +111,7 @@ export function DetailScreen({ app: { state: s, actions: a } }: { app: KarrotApp
           <span
             style={{
               position: 'absolute', right: 12, bottom: 12, padding: '2px 8px', borderRadius: 999,
-              background: 'var(--seed-color-palette-static-black-alpha-500)', color: '#fff', fontSize: 12,
+              background: 'var(--seed-color-palette-static-black-alpha-500)', color: 'var(--seed-color-palette-static-white)', fontSize: 12,
             }}
           >
             1/3
@@ -128,25 +128,25 @@ export function DetailScreen({ app: { state: s, actions: a } }: { app: KarrotApp
             <Icon name="profile_fill" size={34} />
           </div>
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <span style={{ fontSize: 16, fontWeight: 700 }}>{isSeller ? '나 (보리네)' : '보리네'}</span>
-            <span style={{ fontSize: 13, color: COLOR.sub }}>역삼동</span>
+            <span style={{ fontSize: 16, fontWeight: 600 }}>{isSeller ? '나 (보리네)' : '보리네'}</span>
+            <span style={{ fontSize: 12, color: COLOR.sub }}>역삼동</span>
           </div>
           <MannerTempBadge temperature={41.2} />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: '20px 16px 24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
             {s.sold && <Badge tone="neutral" variant="solid">거래완료</Badge>}
-            <span style={{ fontSize: 20, lineHeight: '27px', fontWeight: 700 }}>{l.title}</span>
+            <span style={{ fontSize: 20, lineHeight: '27px', fontWeight: 600 }}>{l.title}</span>
           </div>
-          <span style={{ fontSize: 13, color: COLOR.sub }}>가구/인테리어 · 10분 전</span>
+          <span style={{ fontSize: 12, color: COLOR.sub }}>가구/인테리어 · 10분 전</span>
           <p className="pretty" style={{ margin: '8px 0 0', fontSize: 16, lineHeight: '24px' }}>{l.desc}</p>
         </div>
 
         <div style={{ height: 8, background: 'var(--seed-color-bg-layer-basement)' }} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '20px 16px 32px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <span style={{ fontSize: 18, lineHeight: '24px', fontWeight: 700 }}>거래 정보</span>
-            <span style={{ fontSize: 13, color: COLOR.sub }}>판매자가 직접 입력한 정보예요</span>
+            <span style={{ fontSize: 18, lineHeight: '24px', fontWeight: 600 }}>거래 정보</span>
+            <span style={{ fontSize: 12, color: COLOR.sub }}>판매자가 직접 입력한 정보예요</span>
           </div>
 
           {s.loadState === 'error' && <ErrorCard onRetry={a.retry} />}
@@ -158,19 +158,19 @@ export function DetailScreen({ app: { state: s, actions: a } }: { app: KarrotApp
               ))}
               {missing.length > 0 && !s.sold && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: 16, borderRadius: 12, background: 'var(--seed-color-bg-neutral-weak)' }}>
-                  <span style={{ fontSize: 16, fontWeight: 700 }}>
+                  <span style={{ fontSize: 16, fontWeight: 600 }}>
                     {isSeller ? `구매자가 궁금해할 수 있는 정보 ${missing.length}개` : `확인되지 않은 정보 ${missing.length}개`}
                   </span>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {info.empties.length > 0 && (
                       <div style={{ display: 'flex', gap: 8, fontSize: 14, lineHeight: '20px' }}>
-                        <span style={{ color: COLOR.sub, flexShrink: 0, width: 92 }}>아직 미입력</span>
+                        <span style={{ color: COLOR.sub, flexShrink: 0, width: 96 }}>아직 미입력</span>
                         <span>{labels(info.empties)}</span>
                       </div>
                     )}
                     {info.unknowns.length > 0 && (
                       <div style={{ display: 'flex', gap: 8, fontSize: 14, lineHeight: '20px' }}>
-                        <span style={{ color: COLOR.sub, flexShrink: 0, width: 92 }}>판매자도 모름</span>
+                        <span style={{ color: COLOR.sub, flexShrink: 0, width: 96 }}>판매자도 모름</span>
                         <span>{labels(info.unknowns)}</span>
                       </div>
                     )}
@@ -191,10 +191,10 @@ export function DetailScreen({ app: { state: s, actions: a } }: { app: KarrotApp
         <div style={{ width: 1, height: 36, background: 'var(--seed-color-stroke-neutral-muted)' }} />
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ fontSize: 18, fontWeight: 700 }}>{won(l.price)}</span>
+            <span style={{ fontSize: 18, fontWeight: 600 }}>{won(l.price)}</span>
             {priceChange && <Badge tone="informative" variant="weak">변경</Badge>}
           </div>
-          <span style={{ fontSize: 13, color: COLOR.sub, textDecoration: priceChange ? 'line-through' : 'none' }}>
+          <span style={{ fontSize: 12, color: COLOR.sub, textDecoration: priceChange ? 'line-through' : 'none' }}>
             {priceChange ? priceChange.prev : '가격 제안 불가'}
           </span>
         </div>

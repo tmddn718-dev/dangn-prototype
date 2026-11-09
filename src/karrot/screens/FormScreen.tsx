@@ -21,10 +21,10 @@ function GroupHeader({ title, sub, filled, total, open, onToggle }: {
   return (
     <div onClick={onToggle} className="pressable" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16 }}>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <span style={{ fontSize: 16, fontWeight: 700 }}>{title}</span>
-        <span style={{ fontSize: 13, color: COLOR.sub }}>{sub}</span>
+        <span style={{ fontSize: 16, fontWeight: 600 }}>{title}</span>
+        <span style={{ fontSize: 12, color: COLOR.sub }}>{sub}</span>
       </div>
-      <span style={{ fontSize: 13, color: filled ? COLOR.brand : COLOR.sub }}>{filled ? `${filled}/${total} 입력` : '선택'}</span>
+      <span style={{ fontSize: 12, color: filled ? COLOR.brand : COLOR.sub }}>{filled ? `${filled}/${total} 입력` : '선택'}</span>
       <Icon name={open ? 'expand_less' : 'expand_more'} size={20} />
     </div>
   );
@@ -110,7 +110,7 @@ export function FormScreen({ app: { state: s, actions: a } }: { app: KarrotAppMo
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontSize: 18, lineHeight: '24px', fontWeight: 700 }}>가구 정보</span>
+                <span style={{ fontSize: 18, lineHeight: '24px', fontWeight: 600 }}>가구 정보</span>
                 <Badge tone="neutral" variant="weak">선택</Badge>
               </div>
               <span className="pretty" style={{ fontSize: 14, lineHeight: '20px', color: COLOR.sub }}>
@@ -143,7 +143,7 @@ export function FormScreen({ app: { state: s, actions: a } }: { app: KarrotAppMo
                       ))}
                     </div>
                     {hasError && (
-                      <span style={{ fontSize: 13, lineHeight: '18px', color: 'var(--seed-color-fg-critical)' }}>0보다 큰 숫자로 입력해 주세요</span>
+                      <span style={{ fontSize: 12, lineHeight: '18px', color: 'var(--seed-color-fg-critical)' }}>0보다 큰 숫자로 입력해 주세요</span>
                     )}
                     {hasWarn && !s.sizeOk && (
                       <Callout

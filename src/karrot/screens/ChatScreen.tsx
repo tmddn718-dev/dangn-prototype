@@ -2,7 +2,7 @@ import { ActionButton, AppBar, Icon } from '../../seed';
 import { COLOR, won } from '../model';
 import type { KarrotAppModel } from '../useKarrotApp';
 
-const bubble = { maxWidth: '75%', padding: '10px 14px', fontSize: 15, lineHeight: '21px', whiteSpace: 'pre-wrap' } as const;
+const bubble = { maxWidth: '75%', padding: '12px 16px', fontSize: 14, lineHeight: '20px', whiteSpace: 'pre-wrap' } as const;
 
 type ChatItem = { kind: 'me' | 'them'; text: string } | { kind: 'system'; text: string };
 
@@ -30,9 +30,9 @@ export function ChatScreen({ app: { state: s, actions: a } }: { app: KarrotAppMo
         />
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
           <span style={{ fontSize: 14, lineHeight: '20px' }}>{s.listing.title}</span>
-          <span style={{ fontSize: 14, fontWeight: 700 }}>{won(s.listing.price)}</span>
+          <span style={{ fontSize: 14, fontWeight: 600 }}>{won(s.listing.price)}</span>
         </div>
-        <span style={{ fontSize: 13, color: COLOR.sub }}>상품 정보</span>
+        <span style={{ fontSize: 12, color: COLOR.sub }}>상품 정보</span>
         <Icon name="chevron_right" size={16} />
       </div>
       <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8, padding: 16 }}>
@@ -42,15 +42,15 @@ export function ChatScreen({ app: { state: s, actions: a } }: { app: KarrotAppMo
             <div
               key={i}
               style={{
-                alignSelf: 'stretch', display: 'flex', flexDirection: 'column', gap: 8, padding: '14px 16px', margin: '4px 0',
+                alignSelf: 'stretch', display: 'flex', flexDirection: 'column', gap: 8, padding: '12px 16px', margin: '4px 0',
                 borderRadius: 12, border: '1px solid var(--seed-color-stroke-neutral-muted)',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <Icon name="edit" size={16} />
-                <span style={{ fontSize: 14, fontWeight: 700 }}>판매자가 상품 정보를 수정했어요</span>
+                <span style={{ fontSize: 14, fontWeight: 600 }}>판매자가 상품 정보를 수정했어요</span>
               </div>
-              <span style={{ fontSize: 13, lineHeight: '18px', color: COLOR.sub }}>변경된 항목 · {m.text}</span>
+              <span style={{ fontSize: 12, lineHeight: '18px', color: COLOR.sub }}>변경된 항목 · {m.text}</span>
               <ActionButton variant="neutralWeak" size="small" onClick={a.chatToChanges}>최신 정보 확인하기</ActionButton>
             </div>
           ) : m.kind === 'me' ? (
@@ -80,8 +80,8 @@ export function ChatScreen({ app: { state: s, actions: a } }: { app: KarrotAppMo
           rows={rows}
           placeholder="메시지 보내기"
           style={{
-            flex: 1, resize: 'none', border: 'none', borderRadius: 20, padding: '10px 16px', background: 'var(--seed-color-bg-neutral-weak)',
-            font: 'inherit', fontSize: 15, lineHeight: '20px', color: COLOR.fg,
+            flex: 1, resize: 'none', border: 'none', borderRadius: 20, padding: '12px 16px', background: 'var(--seed-color-bg-neutral-weak)',
+            font: 'inherit', fontSize: 14, lineHeight: '20px', color: COLOR.fg,
           }}
         />
         <div

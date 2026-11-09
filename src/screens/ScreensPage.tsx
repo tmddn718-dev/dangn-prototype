@@ -9,7 +9,7 @@ export function ScreensPage() {
   return (
     <div className="screens-page">
       <header className="screens-header">
-        <span className="screens-eyebrow">PRD v2.1 · 당근 대형 가구 거래 정보 UX 개선</span>
+        <span className="screens-eyebrow">PRD v2.1</span>
         <h1>질문하기 전에 알 수 있는 상품 정보 · 전체 화면</h1>
         <p>판매자 입력 → 구매자 확인 → 정보 변경, 그리고 예외 상태까지 {total}개 화면이에요. 모든 화면은 실제로 눌러볼 수 있어요.</p>
       </header>

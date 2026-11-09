@@ -6,6 +6,8 @@
   background: var(--seed-color-bg-layer-default);
   font-family: var(--seed-font-family);
   color: var(--seed-color-fg-neutral);
+  font-variant-numeric: tabular-nums;
+  word-break: keep-all;
   --z-index-app-bar: 3;
 }
 

@@ -9,6 +9,7 @@ body {
   flex-direction: column;
   gap: 64px;
   padding: 56px;
+  word-break: keep-all;
   font-family: var(--seed-font-family);
   color: var(--seed-color-fg-neutral);
 }
@@ -22,15 +23,15 @@ body {
 
 .screens-eyebrow {
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--seed-color-fg-brand);
 }
 
 .screens-header h1 {
   margin: 0;
-  font-size: 40px;
-  line-height: 52px;
-  font-weight: 700;
+  font-size: 32px;
+  line-height: 44px;
+  font-weight: 600;
 }
 
 .screens-header p {
@@ -55,8 +56,9 @@ body {
 
 .screens-flow-head h2 {
   margin: 0;
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
 }
 
 .screens-flow-head span {
@@ -86,16 +88,16 @@ body {
 
 .screens-frame-id {
   padding: 2px 8px;
-  border-radius: 6px;
-  background: var(--seed-color-bg-neutral-solid);
-  color: var(--seed-color-fg-neutral-inverted);
-  font-size: 13px;
-  font-weight: 700;
+  border-radius: 4px;
+  background: var(--seed-color-bg-neutral-weak);
+  color: var(--seed-color-fg-neutral-muted);
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .screens-frame-title {
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .screens-frame-fr {
@@ -112,7 +114,7 @@ body {
   border-radius: 0;
   overflow: hidden;
   background: var(--seed-color-bg-layer-default);
-  box-shadow: 0 2px 10px #0000001a;
+  box-shadow: 0 0 0 1px var(--seed-color-stroke-neutral-muted);
 }
 
 /* Mobile browsers use overlay scrollbars, so don't let a desktop scrollbar eat the 390px width. */
@@ -126,7 +128,38 @@ body {
 
 .screens-frame-note {
   font-size: 14px;
-  line-height: 21px;
+  line-height: 20px;
   color: var(--seed-color-fg-neutral-muted);
   text-wrap: pretty;
+}
+
+/* Narrow viewports: shrink page gutters and let each phone fill the width instead of being clipped. */
+@media (max-width: 480px) {
+  .screens-page {
+    gap: 40px;
+    padding: 24px 16px;
+  }
+
+  .screens-header h1 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  .screens-frames {
+    gap: 32px;
+  }
+
+  .screens-frame {
+    width: 100%;
+    max-width: 390px;
+  }
+
+  .screens-phone {
+    width: 100%;
+    max-width: 390px;
+  }
+
+  .screens-phone .karrot-app {
+    width: 100%;
+  }
 }
