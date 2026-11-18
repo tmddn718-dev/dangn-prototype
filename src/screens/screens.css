@@ -117,6 +117,21 @@ body {
   box-shadow: 0 0 0 1px var(--seed-color-stroke-neutral-muted);
 }
 
+/* Full-scroll view: PhoneFrame sets the height; the app fills it so nothing inside scrolls. */
+.screens-phone.is-full {
+  aspect-ratio: auto;
+}
+
+.screens-phone.is-full .karrot-app {
+  height: 100%;
+}
+
+.screens-view {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
 /* Mobile browsers use overlay scrollbars, so don't let a desktop scrollbar eat the 390px width. */
 .screens-phone * {
   scrollbar-width: none;
