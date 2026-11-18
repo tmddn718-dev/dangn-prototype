@@ -1,5 +1,5 @@
-import { ActionButton, BottomSheet, Checkbox, Snackbar } from '../seed';
-import { COLOR, LABELS, QUESTIONS, listingInfo } from './model';
+import { ActionButton, BottomSheet, Checkbox, Chip, Snackbar } from '../seed';
+import { APPOINT_DAYS, APPOINT_PLACE, APPOINT_TIMES, COLOR, LABELS, QUESTIONS, REVIEW_RATES, REVIEW_TAGS, listingInfo, pickupChecklist } from './model';
 import { warnSizes } from './screens/FormScreen';
 import type { KarrotAppModel } from './useKarrotApp';
 
@@ -52,6 +52,80 @@ export function ChangesSheet({ app: { state: s, actions: a } }: { app: KarrotApp
       </div>
       <div style={{ display: 'flex' }}>
         <ActionButton variant="neutralSolid" size="large" flexGrow onClick={a.confirmChanges}>최신 정보 확인하기</ActionButton>
+      </div>
+    </BottomSheet>
+  );
+}
+
+const chipRow = { display: 'flex', flexWrap: 'wrap', gap: 8 } as const;
+const field = { display: 'flex', flexDirection: 'column', gap: 10, padding: '12px 0' } as const;
+
+/** 약속 잡기 (T2): pick a day and time; the place is the seller's door since the buyer picks the furniture up. */
+export function AppointSheet({ app: { state: s, actions: a } }: { app: KarrotAppModel }) {
+  const { day, time } = s.appointSel;
+  const check = pickupChecklist(s.listing);
+  return (
+    <BottomSheet contained title="약속 잡기" description="보리네님에게 약속을 보내요. 서로 확인하면 판매글이 예약중으로 바뀌어요." onClose={a.closeSheet}>
+      <div style={{ display: 'flex', flexDirection: 'column', paddingBottom: 16 }}>
+        <div style={field}>
+          <span style={{ fontSize: 14, fontWeight: 600 }}>날짜</span>
+          <div style={chipRow}>
+            {APPOINT_DAYS.map((d) => (
+              <Chip key={d} variant="outlineStrong" size="medium" checked={day === d} onCheckedChange={() => a.pickAppoint('day', d)}>{d}</Chip>
+            ))}
+          </div>
+        </div>
+        <div style={field}>
+          <span style={{ fontSize: 14, fontWeight: 600 }}>시간</span>
+          <div style={chipRow}>
+            {APPOINT_TIMES.map((t) => (
+              <Chip key={t} variant="outlineStrong" size="medium" checked={time === t} onCheckedChange={() => a.pickAppoint('time', t)}>{t}</Chip>
+            ))}
+          </div>
+        </div>
+        <div style={field}>
+          <span style={{ fontSize: 14, fontWeight: 600 }}>장소</span>
+          <span style={{ fontSize: 14, lineHeight: '20px' }}>{APPOINT_PLACE}</span>
+          {check && <span style={{ fontSize: 12, lineHeight: '18px', color: COLOR.sub }}>가져갈 때 확인 · {check}</span>}
+        </div>
+      </div>
+      <div style={{ display: 'flex' }}>
+        <ActionButton variant="brandSolid" size="large" flexGrow disabled={!day || !time} onClick={a.sendAppoint}>
+          {day && time ? `${day} ${time}으로 약속 보내기` : '날짜와 시간을 골라주세요'}
+        </ActionButton>
+      </div>
+    </BottomSheet>
+  );
+}
+
+/** 거래 후기 (T4): a rating plus optional praise, including whether the furniture info was accurate. */
+export function ReviewSheet({ app: { state: s, actions: a } }: { app: KarrotAppModel }) {
+  const { rate, tags } = s.reviewSel;
+  return (
+    <BottomSheet contained title="보리네님과 거래는 어떠셨나요?" description="거래를 마쳤다면 후기를 남겨주세요. 판매글은 거래완료로 바뀌어요." onClose={a.closeSheet}>
+      <div style={{ display: 'flex', flexDirection: 'column', paddingBottom: 16 }}>
+        <div style={field}>
+          <div style={chipRow}>
+            {REVIEW_RATES.map((r) => (
+              <Chip key={r} variant="outlineStrong" size="medium" checked={rate === r} onCheckedChange={() => a.pickRate(r)}>{r}</Chip>
+            ))}
+          </div>
+        </div>
+        {rate && rate !== '별로예요' && (
+          <div style={field}>
+            <span style={{ fontSize: 14, fontWeight: 600 }}>어떤 점이 좋았나요?</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              {REVIEW_TAGS.map((t) => (
+                <Checkbox key={t} label={t} checked={tags.includes(t)} onCheckedChange={() => a.toggleTag(t)} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+      <div style={{ display: 'flex' }}>
+        <ActionButton variant="brandSolid" size="large" flexGrow disabled={!rate} onClick={a.sendReview}>
+          {rate ? '후기 보내기' : '거래가 어땠는지 골라주세요'}
+        </ActionButton>
       </div>
     </BottomSheet>
   );

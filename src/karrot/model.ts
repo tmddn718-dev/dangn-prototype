@@ -197,3 +197,76 @@ export function listingInfo(l: Listing, changes: Change[] = []): ListingInfo {
 
   return { groups, empties, unknowns, furnitureEmpty: sizeEmpty && pickupEmpty };
 }
+
+// ---- Buyer exploration: listings shown in search results and the home feed
+
+export interface CatalogItem {
+  id: 'table' | 'sofa' | 'bookshelf' | 'bed';
+  title: string;
+  img: string;
+  meta: string;
+  price: string;
+  /** Short furniture-info line for list rows; null when the seller entered none. */
+  info: string | null;
+  keywords: string[];
+}
+
+const img = (n: string) => `${import.meta.env.BASE_URL}images/${n}.png`;
+
+/** One-line size summary for list rows, e.g. "140×80cm · 분해 가능". */
+export function listingSummary(l: Listing): string | null {
+  const dims = DIMS.filter((k) => l[k]).map((k) => l[k]);
+  const parts = [dims.length ? `${dims.join('×')}cm` : '', l.disas === 'yes' ? '분해 가능' : l.disas === 'no' ? '분해 불가' : ''].filter(Boolean);
+  return parts.length ? parts.join(' · ') : null;
+}
+
+export function catalog(l: Listing): CatalogItem[] {
+  return [
+    { id: 'table', title: l.title, img: img('table'), meta: '역삼동 · 10분 전', price: won(l.price), info: listingSummary(l), keywords: ['식탁', '테이블', '원목', '대형가구', '가구'] },
+    { id: 'sofa', title: '패브릭 3인용 소파', img: img('sofa'), meta: '논현동 · 32분 전', price: '80,000원', info: '210×90×85cm · 분해 불가', keywords: ['소파', '쇼파', '대형가구', '가구'] },
+    { id: 'bookshelf', title: '이케아 5단 책장', img: img('bookshelf'), meta: '도곡동 · 1시간 전', price: '25,000원', info: null, keywords: ['책장', '이케아', '수납', '대형가구', '가구'] },
+    { id: 'bed', title: '퀸 사이즈 침대 프레임', img: img('bed'), meta: '역삼동 · 어제', price: '나눔', info: '160×210cm · 분해 가능', keywords: ['침대', '프레임', '대형가구', '가구'] },
+  ];
+}
+
+export const SEARCH_SUGGESTIONS = ['대형가구', '식탁', '소파', '침대'];
+
+export function searchCatalog(items: CatalogItem[], query: string, sizeOnly: boolean) {
+  const q = query.trim().replace(/\s+/g, '');
+  if (!q) return [];
+  return items.filter((it) => (it.title.replace(/\s+/g, '').includes(q) || it.keywords.some((k) => k.includes(q) || q.includes(k))) && (!sizeOnly || it.info));
+}
+
+// ---- Trade chat: the seller's scripted answers, appointment and review options
+
+const ANSWERS: Record<InfoKey, string> = {
+  size: '가로 140, 세로 80, 높이 75cm예요.',
+  w: '가로는 140cm예요.',
+  d: '세로는 80cm예요.',
+  h: '높이는 75cm예요.',
+  disas: '다리를 풀면 분해할 수 있어요.',
+  deliver: '조립된 상태로 드릴게요.',
+  floor: '3층이에요.',
+  elevator: '엘리베이터 있어요.',
+  help: '옮길 때 같이 들어드릴 수 있어요.',
+};
+
+/** What the seller replies to a buyer's message, answering any furniture questions it contains. */
+export function sellerAnswer(text: string): string {
+  const answered = (Object.keys(QUESTIONS) as InfoKey[]).filter((k) => text.includes(QUESTIONS[k])).map((k) => ANSWERS[k]);
+  return answered.length ? `네 아직 판매 중이에요! ${answered.join(' ')}` : '네 아직 판매 중이에요. 주말 오후에 거래 가능해요.';
+}
+
+export const APPOINT_DAYS = ['내일', '토요일', '일요일'];
+export const APPOINT_TIMES = ['오전 11시', '오후 2시', '오후 6시'];
+export const APPOINT_PLACE = '역삼동 · 판매자 집 앞';
+
+/** What the buyer should check on pickup day, from the listing's furniture info. */
+export function pickupChecklist(l: Listing): string {
+  return [l.floor ? `${l.floor}층` : '', l.elevator === 'yes' ? '엘리베이터 있음' : l.elevator === 'no' ? '엘리베이터 없음' : '', disasText(l) !== '미입력' ? disasText(l) : '']
+    .filter(Boolean)
+    .join(' · ');
+}
+
+export const REVIEW_RATES = ['별로예요', '좋아요', '최고예요'] as const;
+export const REVIEW_TAGS = ['상품 설명과 실제 상품이 같아요', '크기·운반 정보가 정확했어요', '시간 약속을 잘 지켜요', '친절하고 매너가 좋아요'];

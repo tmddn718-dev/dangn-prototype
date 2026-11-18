@@ -136,6 +136,7 @@ export function DetailScreen({ app: { state: s, actions: a } }: { app: KarrotApp
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: '20px 16px 24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
             {s.sold && <Badge tone="neutral" variant="solid">거래완료</Badge>}
+            {s.reserved && !s.sold && <Badge tone="positive" variant="solid">예약중</Badge>}
             <span style={{ fontSize: 20, lineHeight: '27px', fontWeight: 600 }}>{l.title}</span>
           </div>
           <span style={{ fontSize: 12, color: COLOR.sub }}>가구/인테리어 · 10분 전</span>

@@ -1,23 +1,33 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  BASE, CHANGED, DIMS, FULL, LABELS, PARTIAL, QUESTIONS, diff, dimIssue,
-  type Change, type ChoiceKey, type InfoKey, type Listing,
+  APPOINT_PLACE, BASE, CHANGED, DIMS, FULL, LABELS, PARTIAL, QUESTIONS, diff, dimIssue, sellerAnswer,
+  type CatalogItem, type Change, type ChoiceKey, type InfoKey, type Listing,
 } from './model';
 
 export const SCENARIOS = [
   'home', 'write-empty', 'write-filled', 'write-error', 'write-warn', 'write-dialog', 'review', 'review-empty',
   'seller-detail', 'detail-full', 'detail-partial', 'ask-sheet', 'chat-draft', 'detail-error', 'detail-loading',
   'edit', 'detail-changed', 'changes-sheet', 'chat-changed', 'detail-sold',
+  'search', 'search-results', 'search-filtered',
+  'chat-answered', 'appoint-sheet', 'chat-reserved', 'review-sheet', 'chat-done', 'chat-list',
 ] as const;
 export type Scenario = (typeof SCENARIOS)[number];
 
-export type Screen = 'home' | 'write' | 'edit' | 'review' | 'detail' | 'chat';
+export type Screen = 'home' | 'search' | 'chats' | 'write' | 'edit' | 'review' | 'detail' | 'chat';
 export type FormField = 'title' | 'price' | 'desc' | 'w' | 'd' | 'h' | 'floor';
 export type AppEvent = (name: string, detail: Record<string, unknown>) => void;
 
 export interface Message {
-  from: 'me' | 'them';
+  from: 'me' | 'them' | 'system';
   text: string;
+  /** Cards in the trade chat: an appointment the buyer made, or a sent review. */
+  kind?: 'appoint' | 'review';
+}
+
+export interface Appointment {
+  day: string;
+  time: string;
+  place: string;
 }
 
 export interface Snack {
@@ -35,7 +45,7 @@ export interface AppState {
   mode: 'write' | 'edit';
   open: { p: boolean; t: boolean };
   sizeOk: boolean;
-  sheet: 'ask' | 'changes' | null;
+  sheet: 'ask' | 'changes' | 'appoint' | 'review' | null;
   dialog: 'size' | null;
   askSel: InfoKey[];
   draft: string;
@@ -48,6 +58,13 @@ export interface AppState {
   sold: boolean;
   snack: Snack | null;
   liked: boolean;
+  query: string;
+  searched: boolean;
+  sizeOnly: boolean;
+  appoint: Appointment | null;
+  appointSel: { day: string | null; time: string | null };
+  reserved: boolean;
+  reviewSel: { rate: string | null; tags: string[] };
 }
 
 function initialState(sc: Scenario): AppState {
@@ -55,6 +72,8 @@ function initialState(sc: Scenario): AppState {
     screen: 'home', stack: [], role: 'buyer', listing: { ...PARTIAL }, form: { ...BASE }, mode: 'write',
     open: { p: false, t: false }, sizeOk: false, sheet: null, dialog: null, askSel: [], draft: '', msgs: [],
     changes: [], changesAt: 0, changesSeen: false, loadState: 'ok', sold: false, snack: null, liked: false,
+    query: '', searched: false, sizeOnly: false, appoint: null, appointSel: { day: null, time: null }, reserved: false,
+    reviewSel: { rate: null, tags: [] },
   };
   const seller = { role: 'seller' as const, stack: ['home' as const] };
   const changes = diff(FULL, CHANGED);
@@ -62,6 +81,19 @@ function initialState(sc: Scenario): AppState {
     { from: 'me', text: '안녕하세요! 식탁 아직 판매 중인가요?' },
     { from: 'them', text: '네 아직 있어요. 주말에 거래 가능해요.' },
   ];
+  const asked = `안녕하세요! 주말에 가지러 가도 될까요?\n${QUESTIONS.h}\n${QUESTIONS.help}`;
+  const answered: Message[] = [
+    { from: 'me', text: asked },
+    { from: 'them', text: sellerAnswer(asked) },
+    { from: 'them', text: '편하실 때 약속 잡기로 시간 정해주세요.' },
+  ];
+  const appoint: Appointment = { day: '토요일', time: '오후 2시', place: APPOINT_PLACE };
+  const reservedChat: Message[] = [
+    ...answered,
+    { from: 'me', kind: 'appoint', text: '' },
+    { from: 'them', text: '좋아요! 토요일 오후 2시에 집 앞에서 뵐게요.' },
+  ];
+  const trade = { screen: 'chat' as const, stack: ['home' as const, 'detail' as const], listing: { ...PARTIAL } };
   const presets: Record<Scenario, Partial<AppState>> = {
     'home': {},
     'write-empty': { ...seller, screen: 'write' },
@@ -87,6 +119,21 @@ function initialState(sc: Scenario): AppState {
     'changes-sheet': { screen: 'detail', stack: ['home'], listing: { ...CHANGED }, changes, sheet: 'changes' },
     'chat-changed': { screen: 'chat', stack: ['home'], listing: { ...CHANGED }, changes, msgs: baseChat, changesAt: 2 },
     'detail-sold': { screen: 'detail', stack: ['home'], listing: { ...FULL }, sold: true },
+    'search': { screen: 'search', stack: ['home'] },
+    'search-results': { screen: 'search', stack: ['home'], query: '대형가구', searched: true },
+    'search-filtered': { screen: 'search', stack: ['home'], query: '대형가구', searched: true, sizeOnly: true },
+    'chat-answered': { ...trade, msgs: answered },
+    'appoint-sheet': { ...trade, msgs: answered, sheet: 'appoint', appointSel: { day: '토요일', time: '오후 2시' } },
+    'chat-reserved': { ...trade, msgs: reservedChat, appoint, reserved: true },
+    'review-sheet': {
+      ...trade, msgs: reservedChat, appoint, reserved: true, sheet: 'review',
+      reviewSel: { rate: '최고예요', tags: ['상품 설명과 실제 상품이 같아요', '크기·운반 정보가 정확했어요'] },
+    },
+    'chat-done': {
+      ...trade, appoint, sold: true,
+      msgs: [...reservedChat, { from: 'system', kind: 'review', text: '최고예요 · 상품 설명과 실제 상품이 같아요, 크기·운반 정보가 정확했어요' }],
+    },
+    'chat-list': { screen: 'chats', stack: [], listing: { ...PARTIAL }, msgs: reservedChat, appoint, reserved: true },
   };
   return { ...s, ...presets[sc] };
 }
@@ -96,7 +143,7 @@ export function useKarrotApp(scenario: Scenario, onEvent?: AppEvent) {
   const [state, setState] = useState(() => initialState(scenario));
   const ref = useRef(state);
   ref.current = state;
-  const timers = useRef<{ snack?: number; load?: number; reply?: number }>({});
+  const timers = useRef<{ snack?: number; load?: number; reply?: number; reply2?: number }>({});
   useEffect(() => () => Object.values(timers.current).forEach(clearTimeout), []);
 
   const set = (patch: Partial<AppState> | ((s: AppState) => Partial<AppState>)) =>
@@ -135,6 +182,17 @@ export function useKarrotApp(scenario: Scenario, onEvent?: AppEvent) {
       set({ dialog: null });
       go('review');
     }
+  };
+
+  /** The seller's scripted reply, after a short typing delay. */
+  const reply = (text: string, followUp?: string, after?: () => void) => {
+    clearTimeout(timers.current.reply);
+    clearTimeout(timers.current.reply2);
+    timers.current.reply = window.setTimeout(() => {
+      set((s) => ({ msgs: [...s.msgs, { from: 'them', text }] }));
+      after?.();
+      if (followUp) timers.current.reply2 = window.setTimeout(() => set((s) => ({ msgs: [...s.msgs, { from: 'them', text: followUp }] })), 900);
+    }, 1200);
   };
 
   const openEdit = () => go('edit', { mode: 'edit', form: { ...ref.current.listing }, open: { p: true, t: true }, sizeOk: false });
@@ -249,13 +307,69 @@ export function useKarrotApp(scenario: Scenario, onEvent?: AppEvent) {
     send: () => {
       const text = ref.current.draft.trim();
       if (!text) return;
+      const s0 = ref.current;
+      const first = !s0.msgs.some((m) => m.from === 'them');
       set((s) => ({ msgs: [...s.msgs, { from: 'me', text }], draft: '' }));
       emit('message_sent', { text });
-      clearTimeout(timers.current.reply);
-      timers.current.reply = window.setTimeout(
-        () => set((s) => ({ msgs: [...s.msgs, { from: 'them', text: '확인해보고 바로 알려드릴게요.' }] })),
-        1400,
-      );
+      reply(first || !s0.appoint ? sellerAnswer(text) : '네 확인했어요!', first && !s0.appoint ? '편하실 때 약속 잡기로 시간 정해주세요.' : undefined);
+    },
+    openSearch: () => {
+      go('search', { query: '', searched: false });
+      emit('search_open');
+    },
+    setQuery: (query: string) => set({ query, searched: false }),
+    search: (q?: string) => {
+      const query = (q ?? ref.current.query).trim();
+      if (!query) return;
+      set({ query, searched: true });
+      emit('search', { query });
+    },
+    toggleSizeOnly: () => {
+      set((s) => ({ sizeOnly: !s.sizeOnly }));
+      emit('size_filter', { on: !ref.current.sizeOnly });
+    },
+    openItem: (it: CatalogItem) => {
+      if (it.id !== 'table') {
+        toast('프로토타입에서는 원목 4인용 식탁만 열어볼 수 있어요');
+        return;
+      }
+      go('detail');
+      emit('detail_open', { from: ref.current.screen });
+    },
+    otherChat: () => toast('프로토타입에서는 원목 4인용 식탁 대화만 열어볼 수 있어요'),
+    tab: (screen: 'home' | 'chats') => {
+      set({ screen, stack: [], sheet: null });
+      emit('tab', { screen });
+    },
+    openAppoint: () => {
+      set({ sheet: 'appoint', appointSel: { day: null, time: null } });
+      emit('appoint_open');
+    },
+    pickAppoint: (k: 'day' | 'time', v: string) => set((s) => ({ appointSel: { ...s.appointSel, [k]: s.appointSel[k] === v ? null : v } })),
+    sendAppoint: () => {
+      const { day, time } = ref.current.appointSel;
+      if (!day || !time) return;
+      const appoint = { day, time, place: APPOINT_PLACE };
+      set((s) => ({ appoint, sheet: null, msgs: [...s.msgs, { from: 'me', kind: 'appoint', text: '' }] }));
+      emit('appoint_sent', { day, time });
+      reply(`좋아요! ${day} ${time}에 집 앞에서 뵐게요.`, undefined, () => set({ reserved: true }));
+    },
+    openReview: () => {
+      set({ sheet: 'review', reviewSel: { rate: null, tags: [] } });
+      emit('review_open');
+    },
+    pickRate: (rate: string) => set((s) => ({ reviewSel: { ...s.reviewSel, rate } })),
+    toggleTag: (t: string) =>
+      set((s) => ({ reviewSel: { ...s.reviewSel, tags: s.reviewSel.tags.includes(t) ? s.reviewSel.tags.filter((x) => x !== t) : [...s.reviewSel.tags, t] } })),
+    sendReview: () => {
+      const { rate, tags } = ref.current.reviewSel;
+      if (!rate) return;
+      set((s) => ({
+        sheet: null, sold: true, reserved: false,
+        msgs: [...s.msgs, { from: 'system', kind: 'review', text: [rate, tags.join(', ')].filter(Boolean).join(' · ') }],
+      }));
+      emit('review_sent', { rate, tags });
+      toast('거래 후기를 보냈어요');
     },
   };
 
