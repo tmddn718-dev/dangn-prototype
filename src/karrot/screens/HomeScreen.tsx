@@ -18,10 +18,10 @@ const plusIcon = (
 
 export function HomeScreen({ app: { state: s, actions: a } }: { app: KarrotAppModel }) {
   const items = [
-    { title: s.listing.title, img: '/images/table.png', meta: '역삼동 · 10분 전', price: won(s.listing.price), sold: s.sold, onClick: a.openDetail },
-    { title: '패브릭 3인용 소파', img: '/images/sofa.png', meta: '논현동 · 32분 전', price: '80,000원', sold: false },
-    { title: '이케아 5단 책장', img: '/images/bookshelf.png', meta: '도곡동 · 1시간 전', price: '25,000원', sold: false },
-    { title: '퀸 사이즈 침대 프레임', img: '/images/bed.png', meta: '역삼동 · 어제', price: '나눔', sold: false },
+    { title: s.listing.title, img: `${import.meta.env.BASE_URL}images/table.png`, meta: '역삼동 · 10분 전', price: won(s.listing.price), sold: s.sold, onClick: a.openDetail },
+    { title: '패브릭 3인용 소파', img: `${import.meta.env.BASE_URL}images/sofa.png`, meta: '논현동 · 32분 전', price: '80,000원', sold: false },
+    { title: '이케아 5단 책장', img: `${import.meta.env.BASE_URL}images/bookshelf.png`, meta: '도곡동 · 1시간 전', price: '25,000원', sold: false },
+    { title: '퀸 사이즈 침대 프레임', img: `${import.meta.env.BASE_URL}images/bed.png`, meta: '역삼동 · 어제', price: '나눔', sold: false },
   ];
   return (
     <div data-screen-label="홈" className="screen">

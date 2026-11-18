@@ -77,7 +77,7 @@ export function FormScreen({ app: { state: s, actions: a } }: { app: KarrotAppMo
               <span style={{ fontSize: 12 }}>1/10</span>
             </div>
             <img
-              src="/images/table.png"
+              src={`${import.meta.env.BASE_URL}images/table.png`}
               alt="상품 사진"
               style={{ width: 72, height: 72, borderRadius: 8, objectFit: 'cover', background: 'var(--seed-color-bg-neutral-weak)' }}
             />

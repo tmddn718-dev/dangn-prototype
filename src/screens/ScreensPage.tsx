@@ -5,14 +5,20 @@ import { FLOWS } from './flows';
 import { PhoneFrame } from './PhoneFrame';
 import './screens.css';
 
-/** `?view=full` opens the page with every phone at its full scroll length. */
+/** `#full` opens the page with every phone at its full scroll length. */
 function useFullScroll() {
-  const [full, setFull] = useState(() => new URLSearchParams(location.search).get('view') === 'full');
+  const [full, setFull] = useState(() => location.hash === '#full');
   useEffect(() => {
-    const url = new URL(location.href);
-    if (full) url.searchParams.set('view', 'full');
-    else url.searchParams.delete('view');
-    history.replaceState(null, '', url);
+    const onHash = () => setFull(location.hash === '#full');
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+  useEffect(() => {
+    try {
+      history.replaceState(null, '', full ? '#full' : location.pathname + location.search);
+    } catch {
+      // Some embedded viewers don't allow history changes; the toggle still works.
+    }
   }, [full]);
   return [full, setFull] as const;
 }

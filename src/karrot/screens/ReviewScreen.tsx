@@ -13,7 +13,7 @@ export function ReviewScreen({ app: { state: s, actions: a } }: { app: KarrotApp
           <Callout tone="informative" description="구매자에게 이렇게 보여요. 입력하지 않은 항목은 '아직 입력되지 않았어요'로 표시돼요." />
           <div style={{ background: 'var(--seed-color-bg-layer-default)', borderRadius: 12, padding: 16, display: 'flex', gap: 12, alignItems: 'center' }}>
             <img
-              src="/images/table.png"
+              src={`${import.meta.env.BASE_URL}images/table.png`}
               alt="상품 사진"
               style={{ width: 56, height: 56, borderRadius: 8, objectFit: 'cover', background: 'var(--seed-color-bg-neutral-weak)', flexShrink: 0 }}
             />

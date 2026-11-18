@@ -107,7 +107,7 @@ export function DetailScreen({ app: { state: s, actions: a } }: { app: KarrotApp
         )}
         {s.sold && <PageBanner tone="neutral" description="거래가 완료된 상품이에요" />}
         <div style={{ height: 340, background: 'var(--seed-color-bg-neutral-weak)', position: 'relative' }}>
-          <img src="/images/table.png" alt="원목 4인용 식탁 사진" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          <img src={`${import.meta.env.BASE_URL}images/table.png`} alt="원목 4인용 식탁 사진" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
           <span
             style={{
               position: 'absolute', right: 12, bottom: 12, padding: '2px 8px', borderRadius: 999,

@@ -24,7 +24,7 @@ export function ChatScreen({ app: { state: s, actions: a } }: { app: KarrotAppMo
         style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderBottom: '1px solid var(--seed-color-stroke-neutral-muted)', flexShrink: 0 }}
       >
         <img
-          src="/images/table.png"
+          src={`${import.meta.env.BASE_URL}images/table.png`}
           alt="상품 사진"
           style={{ width: 40, height: 40, borderRadius: 6, objectFit: 'cover', background: 'var(--seed-color-bg-neutral-weak)', flexShrink: 0 }}
         />
